@@ -30,14 +30,15 @@ pipeline {
                     def serviceDirs = env.SERVICE_DIRS.split(",")
 
                     serviceDirs.each { service ->
-                        // changedFiles 라는 리스트를 조회해서 service 변수에 들어온 서비스 이름과
+                        // changedFiles라는 리스트를 조회해서 service 변수에 들어온 서비스 이름과
                         // 하나라도 일치하는 이름이 있다면 true, 하나도 존재하지 않으면 false
                         // service: user-service -> 변경된 파일 경로가 user-service/로 시작한다면 true
-                        if (changedFiles.any { it.startWith(service + "/") }) {
+                        if (changedFiles.any { it.startsWith(service + "/") }) {
                             changedServices.add(service)
                         }
                     }
-                    // 변경된 서비스 이름을 모아놓은 리스트를 다른 스테이지에서도 사용하기 위해 환경 변수로 선언.
+
+                    //변경된 서비스 이름을 모아놓은 리스트를 다른 스테이지에서도 사용하기 위해 환경 변수로 선언.
                     // join() -> 지정한 문자열을 구분자로 하여 리스트 요소를 하나의 문자열로 리턴. 중복 제거.
                     // 환경변수는 문자열만 선언할 수 있어서 join을 사용함.
                     env.CHANGED_SERVICES = changedServices.join(",")
@@ -51,15 +52,15 @@ pipeline {
         }
 
         stage('Build Changed Services') {
-            // 이 스테이지는 빌드되어야할 서비스가 존재한다면 실행되는 스테이지.
+            // 이 스테이지는 빌드되어야 할 서비스가 존재한다면 실행되는 스테이지.
             // 이전 스테이지에서 세팅한 CHANGED_SERVICES라는 환경변수가 비어있지 않아야만 실행.
             when {
-                expression { env.CHANGED_SERVICES != ""}
+                expression { env.CHANGED_SERVICES != "" }
             }
             steps {
                 script {
-                    def serviceDirs = env.CHANGED_SERVICES.split(",")
-                    changedServices.each { service ->
+                   def changedServices = env.CHANGED_SERVICES.split(",")
+                   changedServices.each { service ->
                         sh """
                         echo "Building ${service}..."
                         cd ${service}
@@ -67,9 +68,28 @@ pipeline {
                         ls -al ./build/libs
                         cd ..
                         """
-                    }
+                   }
                 }
             }
         }
+
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
