@@ -99,7 +99,7 @@ pipeline {
                 script {
                     // jenkins에 저장된 credentials를 사용하여 AWS 자격증명을 설정.
                     withAWS(region: "${REGION}", credentials: "aws-key") {
-                        def changedServices = env.CHANGED_SERVICES.split(",")
+                        def changedServices = env.SERVICE_DIRS.split(",")
                         changedServices.each { service ->
                             sh """
                             # ECR에 접속해서 인증 정보를 대신 검증해 주는 도구 다운로드.
