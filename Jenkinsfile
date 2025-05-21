@@ -111,7 +111,7 @@ pipeline {
          stage('Build Docker Image & Push to AWS ECR') {
              steps {
                  script {
-                    // jenkins에 저장된 credentials를 사용하여 AWS 자격 증명을 설정
+                    // jenkins에 저장된 credentials를 사용하여 AWS 자격 증명을 설정.
                      withAWS(region: "${REGION}", credentials: "aws-key") {
                          def changedServices = env.SERVICE_DIRS.split(",")
                          changedServices.each { service ->
