@@ -20,8 +20,15 @@ pipeline {
                 checkout scm // 젠킨스와 연결된 소스 컨트롤 매니저, (git 등)에서 코드를 가져오는 명령어
             }
         }
+        stage ('Add Secret To config-service') {
+            step {
+                withCredentials([file(credentialsId: 'dev', variable: 'configSecret')]) {
+                    sh 'cp $configSecret config-service/src/main/resources/application-dev.yml'
+                }
+            }
+        }
 
-        ////
+
 
         stage('Detect Changes') {
             steps {
