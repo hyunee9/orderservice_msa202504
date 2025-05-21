@@ -92,9 +92,7 @@ pipeline {
         }
 
         stage('Build Docker Image & Push to AWS ECR') {
-            when {
-                expression { env.CHANGED_SERVICES != "" }
-            }
+
             steps {
                 script {
                     // jenkins에 저장된 credentials를 사용하여 AWS 자격증명을 설정.
@@ -122,6 +120,10 @@ pipeline {
 
                 }
             }
+        }
+
+        stage('Deploy Changed Services to AWS EC2') {
+
         }
 
     }
