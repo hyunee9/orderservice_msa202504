@@ -89,6 +89,9 @@ pipeline {
             // 이 스테이지는 빌드되어야 할 서비스가 존재할 때만 실행될 스테이지다!
 
             steps {
+                when {
+                    expression { env.CHANGED_SERVICES != "" }
+                }
                 script {
                 // 환경 변수 불러오기
                     def changedServices = env.CHANGED_SERVICES.split(",")
@@ -109,6 +112,9 @@ pipeline {
             ////
 
          stage('Build Docker Image & Push to AWS ECR') {
+            when {
+                 expression { env.CHANGED_SERVICES != "" }
+             }
              steps {
                  script {
                     // jenkins에 저장된 credentials를 사용하여 AWS 자격 증명을 설정.
