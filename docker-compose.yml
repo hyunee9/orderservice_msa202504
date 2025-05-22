@@ -68,7 +68,7 @@ services:
     restart: always
 
   order-service:
-    image: 043309330471.dkr.ecr.ap-northeast-2.amazonaws.com/order-service:latest
+    image: 043309330471.dkr.ecr.ap-northeast-2.amazonaws.com/ordering-service:latest
     container_name: order-service
     networks:
       - msa-network
